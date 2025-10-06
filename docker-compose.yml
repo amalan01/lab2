@@ -1,10 +1,15 @@
-version: '3.3'
+version: "3.8"
+
 services:
   snake:
-    image: 'amalan06/lab2test:latest'
-    environment:
-      - "PORT:3000"
+    image: amalan06/lab2test:latest
+    build: .
+    container_name: snake_game
     ports:
       - "80:3000"
+    environment:
+      - PORT=3000
     volumes:
       - ./:/app
+    command: ["node", "app.js"]
+
