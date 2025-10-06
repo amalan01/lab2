@@ -21,18 +21,20 @@ pipeline {
             }
         }
 
-        stage('BUILD-AND-TAG') {
+      stage('BUILD-AND-TAG') {
             agent {
                 label 'CYBR3120-01-app-server'
             }
             steps {
                 script {
+                    // Build Docker image using Jenkins Docker Pipeline API
                     echo "Building Docker image ${IMAGE_NAME}..."
                     app = docker.build("${IMAGE_NAME}")
                     app.tag("latest")
                 }
             }
         }
+
 
         stage('POST-TO-DOCKERHUB') {    
             agent {
