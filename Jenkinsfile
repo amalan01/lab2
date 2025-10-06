@@ -23,7 +23,7 @@ pipeline {
 
         stage('BUILD-AND-TAG') {
             agent {
-                label 'App-Server-CWEB2140'
+                label 'CYBR3120-01-app-server'
             }
             steps {
                 script {
