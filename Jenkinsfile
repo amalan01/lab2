@@ -27,7 +27,6 @@ pipeline {
             }
             steps {
                 script {
-                    // Build Docker image using Jenkins Docker Pipeline API
                     echo "Building Docker image ${IMAGE_NAME}..."
                     app = docker.build("${IMAGE_NAME}")
                     app.tag("latest")
@@ -68,23 +67,23 @@ pipeline {
         }
 
         stage('DEPLOYMENT') {    
-    agent {
-        label 'CYBR3120-01-app-server'
-    }
-    steps {
-        echo 'Starting deployment using docker-compose...'
-        script {
-            // Ensure workspace context
-            dir("${WORKSPACE}") {
-                sh '''
-                    echo "Stopping existing containers..."
-                    docker-compose down
-                    echo "Starting containers with updated image..."
-                    docker-compose up -d
-                    echo "Deployment completed successfully!"
-                    docker ps
-                '''
+            agent {
+                label 'CYBR3120-01-app-server'
+            }
+            steps {
+                echo 'Starting deployment using docker-compose...'
+                script {
+                    dir("${WORKSPACE}") {
+                        sh '''
+                            docker-compose pull
+                            docker-compose down
+                            docker-compose up -d
+                            docker ps
+                        '''
+                    }
+                }
+                echo 'Deployment completed successfully!'
             }
         }
-    }
-}
+    }  // <-- closes stages block
+}  // <-- closes pipeline block
