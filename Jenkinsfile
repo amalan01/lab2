@@ -67,9 +67,17 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('DEPLOYMENT') {    
+            agent {
+                label 'App-Server-CWEB2140'
+            }
             steps {
-                sh 'echo Deploy Success!'
+                echo 'Starting deployment using docker-compose...'
+                sh '''
+                    docker-compose down
+                    docker-compose up -d
+                '''
+                echo 'Deployment completed successfully!'
             }
         }
     }
