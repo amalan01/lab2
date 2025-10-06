@@ -68,16 +68,22 @@ pipeline {
         }
 
         stage('DEPLOYMENT') {    
-            agent {
-                label 'CYBR3120-01-app-server'
-            }
-            steps {
-                echo 'Starting deployment using docker-compose...'
+    agent {
+        label 'CYBR3120-01-app-server'
+    }
+    steps {
+        echo 'Starting deployment using docker-compose...'
+        script {
+            // Ensure workspace context
+            dir("${WORKSPACE}") {
                 sh '''
+                    echo "Stopping existing containers..."
                     docker-compose down
+                    echo "Starting containers with updated image..."
                     docker-compose up -d
+                    echo "Deployment completed successfully!"
+                    docker ps
                 '''
-                echo 'Deployment completed successfully!'
             }
         }
     }
